@@ -1,0 +1,17 @@
+name: Daily Script Runner
+
+on:
+  schedule:
+    - cron: "0 3 * * *" # Runs daily at 3 AM UTC
+
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Run script
+        run: bash img_gen_working_final.sh
