@@ -1,9 +1,11 @@
 #ifndef HEADER_H
 #define HEADER_H
+#include "./laserpants/dotenv-0.9.3/dotenv.h"
 #include <Poco/Base64Encoder.h>
 #include <chrono>
 #include <cppcodec/base64_rfc4648.hpp>
 #include <cstddef>
+#include <cstdlib>
 #include <ctime>
 #include <curl/curl.h>
 #include <curl/easy.h>
@@ -19,25 +21,20 @@ using json = nlohmann::json;
 using namespace std;
 using namespace cppcodec;
 
+extern std::string CLOUDFLARE_ACCOUNT_ID;
+extern std::string CLOUDFLARE_AUTH_TOKEN;
+extern std::string FB_PAGE_ID_FAMILY_ISLAND;
+extern std::string FB_ACCESS_TOKEN_FAMILY_ISLAND;
+extern std::string FB_PAGE_ID_COIN_TALES;
+extern std::string FB_ACCESS_TOKEN_COIN_TALES;
+
 // Base64 encoding table
 const std::string base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                  "abcdefghijklmnopqrstuvwxyz"
                                  "0123456789+/";
-
-// ✅ Use `const string` instead of `#define`
-const string CLOUDFLARE_ACCOUNT_ID = "d03ba4adab44b19322eed9dd5a40de7d";
-const string CLOUDFLARE_AUTH_TOKEN = "MkPwb3osbvgKuSWn8XR43dnk3vAs2VW-EgXZ_pek";
-const string FB_PAGE_ID_FAMILY_ISLAND = "555233441009283";
-const string FB_ACCESS_TOKEN_FAMILY_ISLAND =
-    "EAAdBZBbj3fdwBO69Ltwr34trvRwRCHhe5vkgyfMYIMnrbfELEuVAK7EEdccGYDQ4Lq0a6dwZC"
-    "jGigVyaIiDZBdpsU1wLEBXMu9vi7pA7iT6ZBiZCNQJZAj5qDMf8CD8tLXHhlR1mFd8m6yZCREs"
-    "kVsOZB2dOMf0dKzZBNGXYLJVfSgdDmt70KaNPZCqCIW3WU1YiiU";
-const string FB_PAGE_ID_COIN_TALES = "587922784397058";
-const string FB_ACCESS_TOKEN_COIN_TALES =
-    "EAAdBZBbj3fdwBO99QPl9sKbjWxQmgQ2LKgqgkY6djZC5a2ymBBMfBUZCzTokH5DZAV5Duwu31"
-    "MceEXPhV8TVXkkyAgGpc5ZAbfWC5UQnumMh4gLM6jW7cpgOSrornyJSijIklATiWBkVxSGNVwy"
-    "xMDZA9FuHWAJYaZBtcl8He1fYoxK7nlHThaRUSocdUymJ5mZC";
 // Function Declarations
+string getEnvVar(const string &key);
+void load_env_vars();
 std::string image_to_base64(const std::string &image_path);
 string generatePrompt(string prompt_input);
 string generateImage(string prompt);

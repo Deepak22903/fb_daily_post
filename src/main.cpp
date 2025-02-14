@@ -1,7 +1,7 @@
 #include "../include/header.h"
 
 int main() {
-
+  load_env_vars();
   family_island();
   coin_tales();
   // string img =

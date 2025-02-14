@@ -1,5 +1,35 @@
 #include "../include/header.h"
 
+std::string CLOUDFLARE_ACCOUNT_ID;
+std::string CLOUDFLARE_AUTH_TOKEN;
+std::string FB_PAGE_ID_FAMILY_ISLAND;
+std::string FB_ACCESS_TOKEN_FAMILY_ISLAND;
+std::string FB_PAGE_ID_COIN_TALES;
+std::string FB_ACCESS_TOKEN_COIN_TALES;
+
+string getEnvVar(const string &key) {
+  const char *value = getenv(key.c_str());
+  if (!value) {
+    throw runtime_error("Environment variable not set: " + key);
+  }
+  return string(value);
+}
+
+void load_env_vars() {
+  dotenv::init(); // This loads variables from the `.env` file
+
+  try {
+    CLOUDFLARE_ACCOUNT_ID = getEnvVar("CLOUDFLARE_ACCOUNT_ID");
+    CLOUDFLARE_AUTH_TOKEN = getEnvVar("CLOUDFLARE_AUTH_TOKEN");
+    FB_PAGE_ID_FAMILY_ISLAND = getEnvVar("FB_PAGE_ID_FAMILY_ISLAND");
+    FB_ACCESS_TOKEN_FAMILY_ISLAND = getEnvVar("FB_ACCESS_TOKEN_FAMILY_ISLAND");
+    FB_PAGE_ID_COIN_TALES = getEnvVar("FB_PAGE_ID_COIN_TALES");
+    FB_ACCESS_TOKEN_COIN_TALES = getEnvVar("FB_ACCESS_TOKEN_COIN_TALES");
+  } catch (const exception &e) {
+    cerr << "Error: " << e.what() << endl;
+  }
+}
+
 std::string image_to_base64(const std::string &image_path) {
   // Read the image as binary data
   std::ifstream file(image_path, std::ios::binary);

@@ -36,3 +36,7 @@ target_include_directories(fb_post PRIVATE /usr/include/cppcodec/)
 find_package(Poco REQUIRED COMPONENTS Foundation) # Add other components if needed
 target_link_libraries(fb_post PRIVATE Poco::Foundation)
 
+# dotenv
+find_package(laserpants_dotenv)
+target_link_libraries(fb_post PRIVATE laserpants::dotenv)
+
