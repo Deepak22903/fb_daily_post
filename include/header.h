@@ -24,6 +24,7 @@ using namespace cppcodec;
 extern std::string CLOUDFLARE_ACCOUNT_ID;
 extern std::string CLOUDFLARE_AUTH_TOKEN;
 extern std::string FB_PAGE_ID_FAMILY_ISLAND;
+
 extern std::string FB_ACCESS_TOKEN_FAMILY_ISLAND;
 extern std::string FB_PAGE_ID_COIN_TALES;
 extern std::string FB_ACCESS_TOKEN_COIN_TALES;
