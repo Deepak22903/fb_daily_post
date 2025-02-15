@@ -1,5 +1,6 @@
 #ifndef HEADER_H
 #define HEADER_H
+#include "./dotenv/dotenv.h"
 #include <Poco/Base64Encoder.h>
 #include <chrono>
 #include <cppcodec/base64_rfc4648.hpp>
@@ -11,7 +12,6 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <laserpants/dotenv-0.9.3/dotenv.h>
 #include <nlohmann/json.hpp>
 #include <sstream>
 #include <string>

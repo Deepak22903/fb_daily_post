@@ -6,22 +6,26 @@
 
 ### **Installation Commands for Required Libraries and Tools**
 
+```bash
+git clone https://github.com/tplgy/cppcodec.git && cd cppcodec && sudo cp -r cppcodec /usr/include/ && cd .. && sudo rm -rf cppcodec
+```
+
 #### **Arch Linux**
 
 ```bash
-sudo pacman -S nlohmann-json curl poco cppcodec cmake gcc
+sudo pacman -S nlohmann-json curl poco cppcodec cmake gcc git g++
 ```
 
 #### **Ubuntu/Debian**
 
 ```bash
-sudo apt install nlohmann-json-dev libcurl4-openssl-dev libpoco-dev cmake gcc
+sudo apt install nlohmann-json3-dev libcurl4-openssl-dev libpoco-dev cmake gcc git g++
 ```
 
 #### **macOS (Homebrew)**
 
 ```bash
-brew install nlohmann-json curl poco cppcodec cmake gcc
+brew install nlohmann-json curl poco cppcodec cmake gcc git g++
 ```
 
 ---
