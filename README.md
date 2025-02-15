@@ -41,7 +41,7 @@ git clone https://github.com/Deepak22903/fb_daily_post.git && cd fb_daily_post
 Now build using cmake.
 
 ```bash
-mkdir build && cd build && cmake .. && cmake --build . && cd ..
+mkdir build output && cd build && cmake .. && cmake --build . && cd ..
 ```
 
 This will generate the fb_poster executable file.
