@@ -20,7 +20,7 @@ file(GLOB_RECURSE SRC_FILES src/*.cpp)
 add_executable(fb_post ${SRC_FILES})
 
 # define include directory
-target_include_directories(fb_post PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(fb_post PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 # nlohmann/json - Header-only
 find_package(nlohmann_json REQUIRED)
