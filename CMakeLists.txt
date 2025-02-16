@@ -1,12 +1,14 @@
 # Cmake Version
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.10..3.31)
 
 # C++ Version
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Define project name and version
-project(fb_post VERSION 1.0)
+project(fb_post VERSION 1.0
+                DESCRIPTION "This is a very nice project"
+                LANGUAGES CXX)
 
 # Set the output directory for executables
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -33,10 +35,10 @@ target_link_libraries(fb_post PRIVATE ${CURL_LIBRARIES})
 target_include_directories(fb_post PRIVATE /usr/include/cppcodec/)
 
 # Poco
-find_package(Poco REQUIRED COMPONENTS Foundation) # Add other components if needed
+find_package(Poco REQUIRED COMPONENTS Foundation)
 target_link_libraries(fb_post PRIVATE Poco::Foundation)
 
-# dotenv
-find_package(laserpants_dotenv)
-target_link_libraries(fb_post PRIVATE laserpants::dotenv)
+# # dotenv
+# find_package(laserpants_dotenv)
+# target_link_libraries(fb_post PRIVATE laserpants::dotenv)
 
