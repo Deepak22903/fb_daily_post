@@ -1,6 +1,9 @@
 #include "../include/header.h"
+#include <vector>
 
 void family_island() {
+  vector<string> captions = {"caption1", "caption2", "caption3"};
+  string caption = caption_randomizer(captions);
 
   cout << "                                   "
           "╔════════════════════════════════════════╗\n"
@@ -11,6 +14,7 @@ void family_island() {
        << endl;
 
   cout << "\nGenerating prompt for image..." << endl;
+
   string prompt = generatePrompt(
 
       "Suggest a single prompt, don't output anything other than the "
@@ -48,12 +52,14 @@ void family_island() {
   string img_path = generateImage(prompt);
   cout << "Image generated successfully with path : " << img_path << endl;
   cout << "Publishing to facebook..." << endl;
-  string post_id = post_to_fb(img_path, FB_PAGE_ID_FAMILY_ISLAND,
-                              FB_ACCESS_TOKEN_FAMILY_ISLAND);
+  string post_id = post_to_fb(img_path, FB_PAGE_ID, FB_ACCESS_TOKEN, caption);
   cout << "Post added with post_id : " << post_id << endl;
 }
 
 void coin_tales() {
+
+  vector<string> captions = {"caption1", "caption2", "caption3"};
+  string caption = caption_randomizer(captions);
 
   cout << "                                   "
           "╔════════════════════════════════════════╗\n"
@@ -115,7 +121,6 @@ void coin_tales() {
   string img_path = generateImage(prompt);
   cout << "Image generated successfully with path : " << img_path << endl;
   cout << "Publishing to facebook..." << endl;
-  string post_id =
-      post_to_fb(img_path, FB_PAGE_ID_COIN_TALES, FB_ACCESS_TOKEN_COIN_TALES);
+  string post_id = post_to_fb(img_path, FB_PAGE_ID, FB_ACCESS_TOKEN, caption);
   cout << "Post added with post_id : " << post_id << endl;
 }

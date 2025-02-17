@@ -1,11 +1,10 @@
 #include "../include/header.h"
+#include <random>
 
 std::string CLOUDFLARE_ACCOUNT_ID;
 std::string CLOUDFLARE_AUTH_TOKEN;
-std::string FB_PAGE_ID_FAMILY_ISLAND;
-std::string FB_ACCESS_TOKEN_FAMILY_ISLAND;
-std::string FB_PAGE_ID_COIN_TALES;
-std::string FB_ACCESS_TOKEN_COIN_TALES;
+std::string FB_PAGE_ID;
+std::string FB_ACCESS_TOKEN;
 
 string getEnvVar(const string &key) {
   const char *value = getenv(key.c_str());
@@ -21,10 +20,8 @@ void load_env_vars() {
   try {
     CLOUDFLARE_ACCOUNT_ID = getEnvVar("CLOUDFLARE_ACCOUNT_ID");
     CLOUDFLARE_AUTH_TOKEN = getEnvVar("CLOUDFLARE_AUTH_TOKEN");
-    FB_PAGE_ID_FAMILY_ISLAND = getEnvVar("FB_PAGE_ID_FAMILY_ISLAND");
-    FB_ACCESS_TOKEN_FAMILY_ISLAND = getEnvVar("FB_ACCESS_TOKEN_FAMILY_ISLAND");
-    FB_PAGE_ID_COIN_TALES = getEnvVar("FB_PAGE_ID_COIN_TALES");
-    FB_ACCESS_TOKEN_COIN_TALES = getEnvVar("FB_ACCESS_TOKEN_COIN_TALES");
+    FB_PAGE_ID = getEnvVar("FB_PAGE_ID");
+    FB_ACCESS_TOKEN = getEnvVar("FB_ACCESS_TOKEN");
   } catch (const exception &e) {
     cerr << "Error: " << e.what() << endl;
   }
@@ -217,8 +214,8 @@ string generateImage(string prompt) {
   return filename;
 }
 
-string post_to_fb(string generated_img, string page_id,
-                  string fb_access_token) {
+string post_to_fb(string generated_img, string page_id, string fb_access_token,
+                  string caption) {
   CURL *curl = curl_easy_init();
   if (!curl) {
     cerr << "Failed to initialize cURL" << endl;
@@ -228,8 +225,6 @@ string post_to_fb(string generated_img, string page_id,
   string date = "(" + get_date() + ")";
   string response_data;
   string url = "https://graph.facebook.com/v22.0/" + page_id + "/photos";
-  string caption =
-      "Family Island Free Energy ⚡🎁\n" + date + "\nhttps://gogl.to/3GEF ✅";
 
   curl_mime *form = curl_mime_init(curl);
   curl_mimepart *field;
@@ -425,4 +420,15 @@ string generateImageFromImage(string img, string prompt) {
   curl_easy_cleanup(curl);
   curl_slist_free_all(headers);
   return filename;
+}
+
+string caption_randomizer(vector<string> captions) {
+  int lower = 0;
+  int upper = captions.size() - 1;
+  random_device rd;
+  mt19937 gen(rd());
+  uniform_int_distribution<> distr(lower, upper);
+  int rand = distr(gen);
+
+  return captions[rand];
 }
