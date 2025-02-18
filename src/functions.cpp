@@ -1,5 +1,4 @@
 #include "../include/header.h"
-#include <random>
 
 std::string CLOUDFLARE_ACCOUNT_ID;
 std::string CLOUDFLARE_AUTH_TOKEN;

@@ -1,5 +1,4 @@
 #include "../include/header.h"
-#include <vector>
 
 void family_island() {
   vector<string> captions = {"caption1", "caption2", "caption3"};
