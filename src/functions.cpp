@@ -27,19 +27,20 @@ void load_env_vars() {
 }
 
 std::string image_to_base64(const std::string &image_path) {
-  // Read the image as binary data
+  // Open the file in binary mode.
   std::ifstream file(image_path, std::ios::binary);
   if (!file) {
     throw std::runtime_error("Failed to open file: " + image_path);
   }
 
-  std::ostringstream oss;
-  Poco::Base64Encoder encoder(oss);
-  encoder << file.rdbuf(); // Encode file content into Base64
-  encoder.close();
+  // Read the entire file into a std::string.
+  std::string data((std::istreambuf_iterator<char>(file)),
+                   std::istreambuf_iterator<char>());
 
-  return oss.str();
+  // Encode the data to Base64 using cppcodec.
+  return cppcodec::base64_rfc4648::encode(data);
 }
+
 string get_date() {
   auto now = chrono::system_clock::now();
   time_t now_time = chrono::system_clock::to_time_t(now);
