@@ -1,5 +1,5 @@
-#ifndef HEADER_H
-#define HEADER_H
+#pragma once
+
 #include "./dotenv/dotenv.h"
 #include <chrono>
 #include <cppcodec/base64_rfc4648.hpp>
@@ -46,5 +46,3 @@ string generateImageFromImage(string img, string prompt);
 void family_island();
 void coin_tales();
 string caption_randomizer(vector<string> captions);
-
-#endif // HEADER_H
