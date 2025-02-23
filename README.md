@@ -1,4 +1,4 @@
-# Post Ai Generated Images to Facebook Easily!
+# Post AI Generated Images to Facebook Easily
 
 ---
 

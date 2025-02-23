@@ -14,83 +14,84 @@ BOLD='\033[1m'
 CLOUDFLARE_ACCOUNT_ID="d03ba4adab44b19322eed9dd5a40de7d"
 CLOUDFLARE_AUTH_TOKEN="MkPwb3osbvgKuSWn8XR43dnk3vAs2VW-EgXZ_pek"
 FB_PAGE_ID="555233441009283"
-FB_ACCESS_TOKEN="EAANZBEY9KdLkBOZCDRYjSg7RqdTZC9f1i4uPI4RnKS0fFz26pw9c2huvOH6GuSFXQ9FZAPKZBm832w5CaJkj8or93AJzZB9dnkWZCAAYBiWJUyXJJIuAZBIpZAsZCLDZB6f2KI3wcXN3nR14D0HVRL1jbLCrPsZCtkIXGAAbGQLWZCndJqhcfk0Yb994fhDx980ZA3xlbw"
+FB_ACCESS_TOKEN="EAAdBZBbj3fdwBO69Ltwr34trvRwRCHhe5vkgyfMYIMnrbfELEuVAK7EEdccGYDQ4Lq0a6dwZCjGigVyaIiDZBdpsU1wLEBXMu9vi7pA7iT6ZBiZCNQJZAj5qDMf8CD8tLXHhlR1mFd8m6yZCREskVsOZB2dOMf0dKzZBNGXYLJVfSgdDmt70KaNPZCqCIW3WU1YiiU"
 
 # Function to print banner
 print_banner() {
-    echo -e "${CYAN}${BOLD}"
-    echo "╔════════════════════════════════════════╗"
-    echo "║     Family Island Image Generator      ║"
-    echo "╚════════════════════════════════════════╝"
-    echo -e "${NC}"
+  echo -e "${CYAN}${BOLD}"
+  echo "╔════════════════════════════════════════╗"
+  echo "║     Family Island Image Generator      ║"
+  echo "╚════════════════════════════════════════╝"
+  echo -e "${NC}"
 }
 
 # Function to log messages with timestamps
 log_message() {
-    local level=$1
-    local message=$2
-    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    case $level in
-        "INFO")
-            echo -e "${BLUE}[INFO]${NC} ${timestamp} - $message"
-            ;;
-        "SUCCESS")
-            echo -e "${GREEN}[SUCCESS]${NC} ${timestamp} - $message"
-            ;;
-        "ERROR")
-            echo -e "${RED}[ERROR]${NC} ${timestamp} - $message"
-            ;;
-        "WARN")
-            echo -e "${YELLOW}[WARN]${NC} ${timestamp} - $message"
-            ;;
-    esac
+  local level=$1
+  local message=$2
+  local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+  case $level in
+  "INFO")
+    echo -e "${BLUE}[INFO]${NC} ${timestamp} - $message"
+    ;;
+  "SUCCESS")
+    echo -e "${GREEN}[SUCCESS]${NC} ${timestamp} - $message"
+    ;;
+  "ERROR")
+    echo -e "${RED}[ERROR]${NC} ${timestamp} - $message"
+    ;;
+  "WARN")
+    echo -e "${YELLOW}[WARN]${NC} ${timestamp} - $message"
+    ;;
+  esac
 }
 
 # Function to check required commands
 check_dependencies() {
-    local deps=("curl" "jq" "base64")
-    local missing=()
-    
-    for dep in "${deps[@]}"; do
-        if ! command -v "$dep" &> /dev/null; then
-            missing+=("$dep")
-        fi
-    done
-    
-    if [ ${#missing[@]} -ne 0 ]; then
-        log_message "ERROR" "Missing required dependencies: ${missing[*]}"
-        echo -e "${RED}Please install the missing dependencies and try again.${NC}"
-        exit 1
+  local deps=("curl" "jq" "base64")
+  local missing=()
+
+  for dep in "${deps[@]}"; do
+    if ! command -v "$dep" &>/dev/null; then
+      missing+=("$dep")
     fi
+  done
+
+  if [ ${#missing[@]} -ne 0 ]; then
+    log_message "ERROR" "Missing required dependencies: ${missing[*]}"
+    echo -e "${RED}Please install the missing dependencies and try again.${NC}"
+    exit 1
+  fi
 }
 
 # Function to validate environment variables
 validate_config() {
-    local required_vars=("CLOUDFLARE_ACCOUNT_ID" "CLOUDFLARE_AUTH_TOKEN" "FB_PAGE_ID" "FB_ACCESS_TOKEN")
-    local missing=()
-    
-    for var in "${required_vars[@]}"; do
-        if [ -z "${!var}" ]; then
-            missing+=("$var")
-        fi
-    done
-    
-    if [ ${#missing[@]} -ne 0 ]; then
-        log_message "ERROR" "Missing required environment variables: ${missing[*]}"
-        exit 1
+  local required_vars=("CLOUDFLARE_ACCOUNT_ID" "CLOUDFLARE_AUTH_TOKEN" "FB_PAGE_ID" "FB_ACCESS_TOKEN")
+  local missing=()
+
+  for var in "${required_vars[@]}"; do
+    if [ -z "${!var}" ]; then
+      missing+=("$var")
     fi
+  done
+
+  if [ ${#missing[@]} -ne 0 ]; then
+    log_message "ERROR" "Missing required environment variables: ${missing[*]}"
+    exit 1
+  fi
 }
 
 # Main execution with error handling
 main() {
-    print_banner
-    check_dependencies
-    validate_config
-    
-    log_message "INFO" "Starting image generation process..."
-    
-    # Prepare JSON payload
-    JSON_PAYLOAD=$(cat <<EOF
+  print_banner
+  check_dependencies
+  validate_config
+
+  log_message "INFO" "Starting image generation process..."
+
+  # Prepare JSON payload
+  JSON_PAYLOAD=$(
+    cat <<EOF
 {
   "messages": [
     { "role": "system", "content": "You are a friendly assistant" },
@@ -98,65 +99,65 @@ main() {
   ]
 }
 EOF
-)
-    
-    # Get prompt from Cloudflare AI
-    log_message "INFO" "Generating prompt using Cloudflare AI..."
-    prompt=$(curl -s https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/ai/run/@cf/meta/llama-3.1-70b-instruct \
-        -X POST \
-        -H "Authorization: Bearer $CLOUDFLARE_AUTH_TOKEN" \
-        -H "Content-Type: application/json" \
-        -d "$JSON_PAYLOAD" | jq -r '.result.response')
-    
-    if [ -z "$prompt" ]; then
-        log_message "ERROR" "Failed to generate prompt"
-        exit 1
-    fi
-    
-    log_message "SUCCESS" "Prompt generated successfully"
-    
-    # Generate image
-    log_message "INFO" "Generating image using prompt..."
-    current_date=$(date +"%d %B %Y")
-    response=$(curl -s https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/ai/run/@cf/black-forest-labs/flux-1-schnell \
-        -X POST \
-        -H "Authorization: Bearer $CLOUDFLARE_AUTH_TOKEN" \
-        -H "Content-Type: application/json" \
-        -d "$(jq -nc --arg p "$prompt" '{prompt: $p}')")
+  )
 
-    # Extract and save image
-    base64_image=$(echo "$response" | jq -r '.result.image')
-    if [ -z "$base64_image" ]; then
-        log_message "ERROR" "Failed to generate image"
-        exit 1
-    fi
-    
-    echo "$base64_image" | base64 --decode > result.jpg
-    if [ ! -f "result.jpg" ]; then
-        log_message "ERROR" "Failed to save image"
-        exit 1
-    fi
-    
-    log_message "SUCCESS" "Image generated and saved successfully"
-    
-    # Upload to Facebook
-    log_message "INFO" "Uploading to Facebook..."
-    facebook_response=$(curl -s -X POST "https://graph.facebook.com/v22.0/$FB_PAGE_ID/photos" \
-        -F "access_token=$FB_ACCESS_TOKEN" \
-        -F "source=@result.jpg" \
-        -F "caption=Family Island Free Energy ⚡🎁 
+  # Get prompt from Cloudflare AI
+  log_message "INFO" "Generating prompt using Cloudflare AI..."
+  prompt=$(curl -s https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/ai/run/@cf/meta/llama-3.1-70b-instruct \
+    -X POST \
+    -H "Authorization: Bearer $CLOUDFLARE_AUTH_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d "$JSON_PAYLOAD" | jq -r '.result.response')
+
+  if [ -z "$prompt" ]; then
+    log_message "ERROR" "Failed to generate prompt"
+    exit 1
+  fi
+
+  log_message "SUCCESS" "Prompt generated successfully"
+
+  # Generate image
+  log_message "INFO" "Generating image using prompt..."
+  current_date=$(date +"%d %B %Y")
+  response=$(curl -s https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/ai/run/@cf/black-forest-labs/flux-1-schnell \
+    -X POST \
+    -H "Authorization: Bearer $CLOUDFLARE_AUTH_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d "$(jq -nc --arg p "$prompt" '{prompt: $p}')")
+
+  # Extract and save image
+  base64_image=$(echo "$response" | jq -r '.result.image')
+  if [ -z "$base64_image" ]; then
+    log_message "ERROR" "Failed to generate image"
+    exit 1
+  fi
+
+  echo "$base64_image" | base64 --decode >result.jpg
+  if [ ! -f "result.jpg" ]; then
+    log_message "ERROR" "Failed to save image"
+    exit 1
+  fi
+
+  log_message "SUCCESS" "Image generated and saved successfully"
+
+  # Upload to Facebook
+  log_message "INFO" "Uploading to Facebook..."
+  facebook_response=$(curl -s -X POST "https://graph.facebook.com/v22.0/$FB_PAGE_ID/photos" \
+    -F "access_token=$FB_ACCESS_TOKEN" \
+    -F "source=@result.jpg" \
+    -F "caption=Family Island Free Energy ⚡🎁 
 ($current_date) 
 https://gogl.to/3GEF ✅")
-    
-    if echo "$facebook_response" | grep -q "id"; then
-        log_message "SUCCESS" "Image uploaded to Facebook successfully!"
-        post_id=$(echo "$facebook_response" | jq -r '.id')
-        log_message "INFO" "Post ID: $post_id"
-    else
-        log_message "ERROR" "Failed to upload image to Facebook"
-        log_message "ERROR" "Response: $facebook_response"
-        exit 1
-    fi
+
+  if echo "$facebook_response" | grep -q "id"; then
+    log_message "SUCCESS" "Image uploaded to Facebook successfully!"
+    post_id=$(echo "$facebook_response" | jq -r '.id')
+    log_message "INFO" "Post ID: $post_id"
+  else
+    log_message "ERROR" "Failed to upload image to Facebook"
+    log_message "ERROR" "Response: $facebook_response"
+    exit 1
+  fi
 }
 
 # Trap errors
