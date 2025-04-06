@@ -5,3 +5,4 @@ out/
 compile_commands.json
 .cache/
 img_gen_working_final.sh
+.github/
